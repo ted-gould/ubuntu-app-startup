@@ -5,6 +5,7 @@ import Ubuntu.Components.ListItems 1.0 as ListItem
 MainView {
 	id: mainview
 	automaticOrientation: true
+	useDeprecatedToolbar: false
 
 	width: units.gu(40)
 	height: units.gu(70)
