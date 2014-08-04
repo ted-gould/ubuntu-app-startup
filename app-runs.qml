@@ -48,12 +48,24 @@ Page {
 					var runsObj = JSON.parse(req.responseText)["data"]
 					for (var key in runsObj) {
 						var testobj = {}
+						testobj.id = runsObj[key].id
 						testobj.datetime = runsObj[key].data.datetime
 						testobj.build = runsObj[key].data.build_id
 						testobj.tracepoints = runsObj[key].data.tracepoints
 						runsList.append(testobj)
 					}
 					console.log("Runs Count: " + runsList.count)
+
+					// Ugly sort
+					var n;
+					var i;
+					for (n=0; n < runsList.count; n++)
+						for (i=n+1; i < runsList.count; i++) {
+							if (runsList.get(n).id < runsList.get(i).id) {
+								runsList.move(i, n, 1);
+								n=0;
+							}
+						}
 				}
 			};
 		}
