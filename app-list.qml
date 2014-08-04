@@ -17,9 +17,6 @@ Page {
 			onClicked: {
 				pageStack.push(Qt.resolvedUrl("app-runs.qml"), {name: appName, path: path});
 			}
-			Component.onCompleted: {
-				console.log("Completed: " + path)
-			}
 		}
 	}
 
@@ -42,18 +39,15 @@ Page {
 			req.onreadystatechange = function() {
 				if (req.readyState == 4) {
 					//turn the text in a javascript object while setting the ListView's model to it
-					//console.log("Got data: " + req.responseText)
-					//var appArray = []
 					appList.clear()
 					var appObj = JSON.parse(req.responseText)["tests"]
 					for (var key in appObj) {
 						var testobj = {}
-						console.log("Looking at: " + key)
 						testobj.appName = key
 						testobj.path = appObj[key].path
 						appList.append(testobj)
 					}
-					console.log("Length: " + appList.count)
+					console.log("Application Count: " + appList.count)
 				}
 			};
 		}
