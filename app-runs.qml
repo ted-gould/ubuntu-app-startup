@@ -16,11 +16,11 @@ Page {
 	Component {
 		id: runsDelegate
 		ListItem.Subtitled {
-			text: datetime
+			text: datetime.toLocaleString(Locale.ShortFormat)
 			subText: build
 			progression: true
 			onClicked: {
-				pageStack.push(Qt.resolvedUrl("run.qml"), {runtime: datetime, tracepoints: tracepoints});
+				pageStack.push(Qt.resolvedUrl("run.qml"), {runtime: datetime.toLocaleString(Locale.NarrowFormat), tracepoints: tracepoints});
 			}
 		}
 	}
