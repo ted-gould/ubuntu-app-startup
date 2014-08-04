@@ -5,7 +5,7 @@
     "hooks": {
         "ubuntu-app-startup": {
             "apparmor": "ubuntu-app-startup.json",
-            "desktop": "ubuntu-app-startup.desktop",
+            "desktop": "ubuntu-app-startup.desktop"
         }
     },
     "icon": "ubuntu-app-startup.png",
