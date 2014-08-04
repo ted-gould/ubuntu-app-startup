@@ -20,7 +20,7 @@ Page {
 			subText: build
 			progression: true
 			onClicked: {
-				pageStack.push(Qt.resolvedUrl("run.qml"), {tracepoints: data.tracepoints});
+				pageStack.push(Qt.resolvedUrl("run.qml"), {runtime: datetime, tracepoints: tracepoints});
 			}
 		}
 	}
@@ -51,7 +51,7 @@ Page {
 						testobj.id = runsObj[key].id
 						testobj.datetime = runsObj[key].data.datetime
 						testobj.build = runsObj[key].data.build_id
-						testobj.tracepoints = runsObj[key].data.tracepoints
+						testobj.tracepoints = runsObj[key].data.tracepoints[0]
 						runsList.append(testobj)
 					}
 					console.log("Runs Count: " + runsList.count)

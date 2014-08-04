@@ -6,6 +6,9 @@ MainView {
 	id: mainview
 	automaticOrientation: true
 
+	width: units.gu(40)
+	height: units.gu(70)
+
 	Component.onCompleted: {
 		pageStack.push(Qt.resolvedUrl("app-list.qml"))
 	}
