@@ -1,0 +1,16 @@
+{
+    "architecture": "all",
+    "description": "View Ubuntu Applicaiton Startup Metrics",
+    "framework": "ubuntu-sdk-14.04",
+    "hooks": {
+        "ubuntu-app-startup": {
+            "apparmor": "ubuntu-app-startup.json",
+            "desktop": "ubuntu-app-startup.desktop",
+        }
+    },
+    "icon": "ubuntu-app-startup.png",
+    "maintainer": "Ted Gould <ted@gould.cx>",
+    "name": "cx.gould.ted.ubuntu-app-startup",
+    "title": "Ubuntu App Startup",
+    "version": "0.1"
+}

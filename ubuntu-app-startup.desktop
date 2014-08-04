@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Ubuntu App Startup
+Type=Application
+Icon=ubuntu-app-startup.png
+Exec=qmlscene main.qml
+Terminal=false
+X-Ubuntu-Touch=true
+X-Ubuntu-StageHint=SideStage
+X-Ubuntu-Single-Instance=true
