@@ -16,11 +16,12 @@ Page {
 	Component {
 		id: runsDelegate
 		ListItem.Subtitled {
-			text: Date(datetime).toLocaleString(Locale.ShortFormat)
-			subText: build
+			text: datetime
+			subText: appId
 			progression: true
+
 			onClicked: {
-				pageStack.push(Qt.resolvedUrl("run.qml"), {runtime: Date(datetime).toLocaleString(Locale.NarrowFormat), tracepoints: tracepoints});
+				pageStack.push(Qt.resolvedUrl("run.qml"), {runtime: datetime, tracepoints: tpAverage});
 			}
 		}
 	}
@@ -30,6 +31,14 @@ Page {
 		model: runsList
 		delegate: runsDelegate
 		anchors.fill: parent
+
+		function average (inarray) {
+			var sum = 0.0
+			for (var value in inarray) {
+				sum += inarray[value]
+			}
+			return sum / inarray.length
+		}
 
 		Component.onCompleted: {
 			//create a request and tell it where the json that I want is
@@ -45,16 +54,66 @@ Page {
 				if (req.readyState == 4) {
 					//turn the text in a javascript object while setting the ListView's model to it
 					runsList.clear()
+
+					var builds = {}
 					var runsObj = JSON.parse(req.responseText)["data"]
+
 					for (var key in runsObj) {
-						var testobj = {}
-						testobj.id = runsObj[key].id
-						testobj.datetime = runsObj[key].data.datetime
-						testobj.build = runsObj[key].data.build_id
-						testobj.tracepoints = runsObj[key].data.tracepoints[0]
-						runsList.append(testobj)
+						var build = builds[runsObj[key].data.build_num]
+
+						if (build) {
+							// Add run
+							build.appRuns.push(runsObj[key].data.tracepoints[0])
+						} else {
+							build = {}
+
+							build.id = runsObj[key].id
+							build.datetime = runsObj[key].data.datetime
+							build.build = runsObj[key].data.build_id
+							build.appId = runsObj[key].data.app_id
+							build.appRuns = []
+							build.appRuns.push(runsObj[key].data.tracepoints[0])
+						}
+
+						builds[runsObj[key].data.build_num] = build
 					}
-					console.log("Runs Count: " + runsList.count)
+
+					for (var build in builds) {
+						var tracepoints = {}
+						for (var runindex in builds[build].appRuns) {
+							var run = builds[build].appRuns[runindex]
+
+							var starttime = run.libual_start_message_sent
+							if (starttime) {
+								for (var runtp in run) {
+									var tp = tracepoints[runtp]
+									var time = run[runtp] - starttime
+									if (tp) {
+										tp.times.push(time)
+									} else {
+										tp = {}
+										tp.times = []
+										tp.times.push(time)
+									}
+
+									tracepoints[runtp] = tp
+								}
+							}
+						}
+
+						var tpAv = {}
+						for (var tp in tracepoints) {
+							tpAv[tp] = {}
+							tpAv[tp].time = average(tracepoints[tp].times)
+							tpAv[tp].runs = tracepoints[tp].times.length
+							console.log("Tracepoint '" + tp + "' average '" + tpAv[tp].time + "'")
+						}
+
+						builds[build].tpAverage = tpAv
+
+						runsList.append(builds[build])
+					}
+					console.log("Sets Count: " + runsList.count)
 
 					// Ugly sort
 					var n;
