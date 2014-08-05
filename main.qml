@@ -6,6 +6,7 @@ MainView {
 	id: mainview
 	automaticOrientation: true
 	useDeprecatedToolbar: false
+	applicationName: "cx.gould.ted.ubuntu-app-startup"
 
 	width: units.gu(40)
 	height: units.gu(70)

@@ -106,7 +106,6 @@ Page {
 							tpAv[tp] = {}
 							tpAv[tp].time = average(tracepoints[tp].times)
 							tpAv[tp].runs = tracepoints[tp].times.length
-							console.log("Tracepoint '" + tp + "' average '" + tpAv[tp].time + "'")
 						}
 
 						builds[build].tpAverage = tpAv
