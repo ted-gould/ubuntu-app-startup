@@ -16,12 +16,12 @@ Page {
 	Component {
 		id: runsDelegate
 		ListItem.Subtitled {
-			text: datetime
+			text: datetime.toLocaleString()
 			subText: appId
 			progression: true
 
 			onClicked: {
-				pageStack.push(Qt.resolvedUrl("run.qml"), {runtime: datetime, tracepoints: tpAverage});
+				pageStack.push(Qt.resolvedUrl("run.qml"), {runtime: datetime.toLocaleString(), tracepoints: tpAverage});
 			}
 		}
 	}
@@ -68,7 +68,7 @@ Page {
 							build = {}
 
 							build.id = runsObj[key].id
-							build.datetime = runsObj[key].data.datetime
+							build.datetime = new Date(runsObj[key].data.datetime)
 							build.build = runsObj[key].data.build_id
 							build.appId = runsObj[key].data.app_id
 							build.appRuns = []
