@@ -1,4 +1,5 @@
 import QtQuick 2.0 
+import QtQml 2.2
 import Ubuntu.Components 1.1 
 import Ubuntu.Components.ListItems 1.0 as ListItem
 import Ubuntu.Web 0.2
@@ -51,12 +52,16 @@ Page {
 <meta charset=\"utf-8\">
 <style>
 
+body {
+  background-color: #CCCCCC;
+}
+
 .bar {
-  fill: steelblue;
+  fill: " + UbuntuColors.orange + ";
 }
 
 .axis {
-  font: 10px sans-serif;
+  font: 10px Ubuntu;
 }
 
 .axis path,
@@ -75,7 +80,7 @@ Page {
 <script src=\"http://d3js.org/d3.v3.min.js\"></script>
 <script>
 
-var margin = {top: " + units.gu(4) + ", right: " + units.gu(4) + ", bottom: " + units.gu(4) + ", left: " + units.gu(4) + "},
+var margin = {top: " + units.gu(4) + ", right: " + units.gu(4) + ", bottom: " + units.gu(4) + ", left: " + units.gu(6) + "},
     width = " + (webview.width - units.gu(3)) + " - margin.left - margin.right,
     height = " + (webview.height - units.gu(3)) + " - margin.top - margin.bottom;
 
