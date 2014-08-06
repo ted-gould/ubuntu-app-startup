@@ -30,10 +30,108 @@ Page {
 	Component {
 		id: webviewComponent
 		ListItem.SingleControl {
+			id: webviewControl
 			control: WebView {
+				id: webview
 				width: appRuns.width
 				height: appRuns.width / 3 * 2
-				url: "http://ubuntu.com"
+
+				Component.onCompleted: {
+					setWebView()
+				}
+
+				function setWebView (data) {
+					if (!data) {
+						webview.loadHtml("<html></html>")
+						return
+					}
+
+					webview.loadHtml("
+<!DOCTYPE html>
+<meta charset=\"utf-8\">
+<style>
+
+.bar {
+  fill: steelblue;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+</style>
+<body>
+<script src=\"http://d3js.org/d3.v3.min.js\"></script>
+<script>
+
+var margin = {top: " + units.gu(4) + ", right: " + units.gu(4) + ", bottom: " + units.gu(4) + ", left: " + units.gu(4) + "},
+    width = " + (webview.width - units.gu(3)) + " - margin.left - margin.right,
+    height = " + (webview.height - units.gu(3)) + " - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient(\"bottom\");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient(\"left\")
+    .ticks(5, \" ms\");
+
+var data =" + JSON.stringify(data) + "; 
+
+var svg = d3.select(\"body\").append(\"svg\")
+    .attr(\"width\", width + margin.left + margin.right)
+    .attr(\"height\", height + margin.top + margin.bottom)
+  .append(\"g\")
+    .attr(\"transform\", \"translate(\" + margin.left + \",\" + margin.top + \")\");
+
+  x.domain(data.map(function(d) { return d.date; }));
+  y.domain([0, d3.max(data, function(d) { return d.time; })]);
+
+  svg.append(\"g\")
+      .attr(\"class\", \"x axis\")
+      .attr(\"transform\", \"translate(0,\" + height + \")\")
+      .call(xAxis);
+
+  svg.append(\"g\")
+      .attr(\"class\", \"y axis\")
+      .call(yAxis)
+    .append(\"text\")
+      .attr(\"transform\", \"rotate(-90)\")
+      .attr(\"y\", 6)
+      .attr(\"dy\", \".71em\")
+      .style(\"text-anchor\", \"end\")
+      .text(\"Time\");
+
+  svg.selectAll(\".bar\")
+      .data(data)
+    .enter().append(\"rect\")
+      .attr(\"class\", \"bar\")
+      .attr(\"x\", function(d) { return x(d.date); })
+      .attr(\"width\", x.rangeBand())
+      .attr(\"y\", function(d) { return y(d.time); })
+      .attr(\"height\", function(d) { return height - y(d.time); });
+
+</script>
+");
+				}
 			}
 		}
 	}
@@ -51,6 +149,19 @@ Page {
 				sum += inarray[value]
 			}
 			return sum / inarray.length
+		}
+
+		function day2str (day) {
+			var days = [
+				"Sun",
+				"Mon",
+				"Tue",
+				"Wed",
+				"Thr",
+				"Fri",
+				"Sat"
+			]
+			return days[day]
 		}
 
 		Component.onCompleted: {
@@ -137,6 +248,23 @@ Page {
 								n=0;
 							}
 						}
+
+					var data = []
+					for (n = 0; n < 5 && n < runsList.count; n++) {
+						var obj = {}
+						obj.date = day2str(runsList.get(n).datetime.getDay())
+						obj.time = 0
+						for (var point in runsList.get(n).tpAverage) {
+							var pnttime = runsList.get(n).tpAverage[point].time
+							if (pnttime > obj.time)
+								obj.time = pnttime
+						}
+						obj.time = obj.time / 1000000 /* ms */
+
+						data.push(obj)
+					}
+
+					headerItem.control.setWebView(data)
 				}
 			};
 		}
