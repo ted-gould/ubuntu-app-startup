@@ -1,6 +1,7 @@
 import QtQuick 2.0 
 import Ubuntu.Components 1.1 
 import Ubuntu.Components.ListItems 1.0 as ListItem
+import Ubuntu.Web 0.2
 
 Page {
 	id: appRuns
@@ -26,11 +27,23 @@ Page {
 		}
 	}
 
+	Component {
+		id: webviewComponent
+		ListItem.SingleControl {
+			control: WebView {
+				width: appRuns.width
+				height: appRuns.width / 3 * 2
+				url: "http://ubuntu.com"
+			}
+		}
+	}
+
 	ListView {
 		id: runsView
 		model: runsList
 		delegate: runsDelegate
 		anchors.fill: parent
+		header: webviewComponent
 
 		function average (inarray) {
 			var sum = 0.0
