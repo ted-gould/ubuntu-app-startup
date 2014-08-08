@@ -34,15 +34,13 @@ Page {
 			id: webviewControl
 			control: WebView {
 				id: webview
+				visible: false
 				width: appRuns.width
 				height: appRuns.width / 3 * 2
 
-				Component.onCompleted: {
-					setWebView()
-				}
-
 				function setWebView (data) {
 					if (!data) {
+						webview.visible = false
 						webview.loadHtml("
 <!DOCTYPE html>
 <meta charset=\"utf-8\">
@@ -147,6 +145,7 @@ var svg = d3.select(\"body\").append(\"svg\")
 </script>
 </body>
 ");
+					webview.visible = true
 				}
 			}
 		}
