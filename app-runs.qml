@@ -43,7 +43,17 @@ Page {
 
 				function setWebView (data) {
 					if (!data) {
-						webview.loadHtml("<html></html>")
+						webview.loadHtml("
+<!DOCTYPE html>
+<meta charset=\"utf-8\">
+<style>
+body {
+  background-color: #CCCCCC;
+}
+</style>
+<body>
+<script src=\"http://d3js.org/d3.v3.min.js\"></script>
+</body>");
 						return
 					}
 
@@ -135,6 +145,7 @@ var svg = d3.select(\"body\").append(\"svg\")
       .attr(\"height\", function(d) { return height - y(d.time); });
 
 </script>
+</body>
 ");
 				}
 			}
