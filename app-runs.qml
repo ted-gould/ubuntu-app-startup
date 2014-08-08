@@ -264,7 +264,8 @@ var svg = d3.select(\"body\").append(\"svg\")
 							if (pnttime > obj.time)
 								obj.time = pnttime
 						}
-						obj.time = obj.time / 1000000 /* ms */
+						/* Not sure why 10,000,000 is the answer, must be based on the kernel ticks for the ARMs we're looking at */
+						obj.time = obj.time / 10000000 /* ms */
 
 						data.push(obj)
 					}

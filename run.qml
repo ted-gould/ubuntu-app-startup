@@ -13,7 +13,7 @@ Page {
 		id: traceItem
 		ListItem.Subtitled {
 			text: name
-			subText: (time / 1000000) + " ms  (n = " + runCount + ")"
+			subText: (time / 10000000) + " ms  (n = " + runCount + ")"
 		}
 	}
 
