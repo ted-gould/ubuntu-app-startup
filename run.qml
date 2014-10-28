@@ -12,8 +12,8 @@ Page {
 	Component {
 		id: traceItem
 		ListItem.Subtitled {
-			text: name
-			subText: (time / 10000000) + " ms  (n = " + runCount + ")"
+			text: name == "exec_pre_exec" ? name + " (time on graph)" : name
+			subText: (time / 1000000) + " ms  (n = " + runCount + ")"
 		}
 	}
 

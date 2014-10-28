@@ -222,7 +222,7 @@ var svg = d3.select(\"body\").append(\"svg\")
 						for (var runindex in builds[build].appRuns) {
 							var run = builds[build].appRuns[runindex]
 
-							var starttime = run.libual_start_message_sent
+							var starttime = run.libual_start
 							if (starttime) {
 								for (var runtp in run) {
 									var tp = tracepoints[runtp]
@@ -268,14 +268,9 @@ var svg = d3.select(\"body\").append(\"svg\")
 					for (n = 0; n < 5 && n < runsList.count; n++) {
 						var obj = {}
 						obj.date = day2str(runsList.get(n).datetime.getDay())
-						obj.time = 0
-						for (var point in runsList.get(n).tpAverage) {
-							var pnttime = runsList.get(n).tpAverage[point].time
-							if (pnttime > obj.time)
-								obj.time = pnttime
-						}
-						/* Not sure why 10,000,000 is the answer, must be based on the kernel ticks for the ARMs we're looking at */
-						obj.time = obj.time / 10000000 /* ms */
+						obj.time = runsList.get(n).tpAverage["exec_pre_exec"].time
+
+						obj.time = obj.time / 1000000 /* ms */
 
 						data.push(obj)
 					}
